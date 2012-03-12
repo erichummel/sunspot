@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = Sunspot::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch',
-                  'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas', 
+                  'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas',
                   'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo']
 
   s.name = 'erichummel-sunspot'
@@ -28,13 +28,12 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.executables   = ['sunspot-solr', 'sunspot-installer']
 
-  s.add_dependency 'rsolr', '0.12.1'
-  s.add_dependency 'escape', '0.0.4'
-  s.add_dependency 'pr_geohash', '~> 1.0'
+  s.add_dependency 'rsolr', '~>1.0.6'
+  s.add_dependency 'escape', '~>0.0.4'
+  s.add_dependency 'pr_geohash', '~>1.0'
 
-  s.add_development_dependency 'rspec', '~> 1.1'
+  s.add_development_dependency 'rspec', '~>2.6.0'
   s.add_development_dependency 'hanna'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<

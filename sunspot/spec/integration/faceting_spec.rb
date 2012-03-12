@@ -1,4 +1,4 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'search faceting' do
   def self.test_field_type(name, attribute, field, *args)
@@ -133,6 +133,19 @@ describe 'search faceting' do
       end
       search.facet(:title).rows.first.value.should == :none
       search.facet(:title).rows.first.count.should == 1
+    end
+
+    it 'gives correct facet count when group == true and truncate == true' do
+      search = Sunspot.search(Post) do
+        group :title do
+          truncate
+        end
+
+        facet :title, :extra => :any
+      end
+
+      # Should be 5 instead of 11
+      search.facet(:title).rows.first.count.should == 5
     end
   end
 

@@ -4,16 +4,14 @@ module Sunspot
       extend ActiveSupport::Concern
 
       included do
-        alias_method :request_without_as_instrumentation, :request
-        alias_method :request, :request_with_as_instrumentation
+        alias_method_chain :execute, :as_instrumentation
       end
 
-      module InstanceMethods
-        def request_with_as_instrumentation(path, params={}, *extra)
-          ActiveSupport::Notifications.instrument("request.rsolr",
-                                                  {:path => path, :parameters => params}) do
-            request_without_as_instrumentation(path, params, *extra)
-          end
+
+      def execute_with_as_instrumentation(path, params={}, *extra)
+        ActiveSupport::Notifications.instrument("request.rsolr",
+                                                {:path => path, :parameters => params}) do
+          execute_without_as_instrumentation(path, params, *extra)
         end
       end
     end

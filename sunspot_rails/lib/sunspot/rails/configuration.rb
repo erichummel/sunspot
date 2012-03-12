@@ -14,11 +14,15 @@ module Sunspot #:nodoc:
     #       min_memory: 512M
     #       max_memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
+    #       bind_address: 0.0.0.0
+    #     disabled: false
     #   test:
     #     solr:
     #       hostname: localhost
     #       port: 8983
     #       log_level: OFF
+    #       open_timeout: 0.5
+    #       read_timeout: 2
     #   production:
     #     solr:
     #       hostname: localhost
@@ -26,6 +30,8 @@ module Sunspot #:nodoc:
     #       path: /solr/myindex
     #       log_level: WARNING
     #       solr_home: /some/path
+    #       open_timeout: 0.5
+    #       read_timeout: 2
     #     master_solr:
     #       hostname: localhost
     #       port: 8982
@@ -238,11 +244,34 @@ module Sunspot #:nodoc:
       def max_memory
         @max_memory ||= user_configuration_from_key('solr', 'max_memory')
       end
+
+      #
+      # Interface on which to run Solr
+      #
+      def bind_address
+        @bind_address ||= user_configuration_from_key('solr', 'bind_address')
+      end
       
       def multicore
         @multicore ||= !!user_configuration_from_key('solr', 'multicore')
       end
       
+      def read_timeout
+        @read_timeout ||= user_configuration_from_key('solr', 'read_timeout')
+      end
+
+      def open_timeout
+        @open_timeout ||= user_configuration_from_key('solr', 'open_timeout')
+      end
+
+      #
+      # Whether or not to disable Solr.
+      # Defaults to false.
+      #
+      def disabled?
+        @disabled ||= (user_configuration_from_key('disabled') || false)
+      end
+
       private
       
       #

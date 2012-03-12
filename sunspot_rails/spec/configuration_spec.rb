@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
@@ -36,6 +36,14 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
       @config.port.should == 8983
     end
   end
+  
+  it "should set the read timeout to nil when not set" do
+    @config.read_timeout == nil
+  end
+
+  it "should set the open timeout to nil when not set" do
+    @config.open_timeout == nil
+  end
 
   it "should handle the 'log_level' property when not set" do
     @config.log_level.should == 'INFO'
@@ -66,6 +74,14 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   
   it "should handle the 'auto_commit_after_delete_request' propery when not set" do
     @config.auto_commit_after_delete_request?.should == false
+  end
+
+  it "should handle the 'bind_address' property when not set" do
+    @config.bind_address.should be_nil
+  end
+
+  it "should handle the 'disabled' property when not set" do
+    @config.disabled?.should be_false
   end
 end
 
@@ -114,8 +130,28 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   it "should handle the 'auto_commit_after_delete_request' propery when set" do
     @config.auto_commit_after_delete_request?.should == true
   end
+
+  it "should handle the 'bind_address' property when set" do
+    @config.bind_address.should == "127.0.0.1"
+  end
+  it "should handle the 'read_timeout' property when set" do
+    @config.read_timeout.should == 2
+  end
+  it "should handle the 'open_timeout' property when set" do
+    @config.open_timeout.should == 0.5
+  end
 end
 
+describe Sunspot::Rails::Configuration, "with disabled: true in sunspot.yml" do
+  before(:each) do
+    ::Rails.stub!(:env => 'config_disabled_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+
+  it "should handle the 'disabled' property when set" do
+    @config.disabled?.should be_true
+  end
+end
 
 describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot.yml" do
   before(:all) do

@@ -32,6 +32,12 @@ describe 'hits', :type => :search do
     session.search(Post).hits.first.instance.should == posts.first
   end
 
+  it 'should return the instance primary key when you use it as a param' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    session.search(Post).hits.first.to_param.should == posts.first.id.to_s
+  end
+
   it 'should provide iterator over hits with instances' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)
@@ -100,6 +106,11 @@ describe 'hits', :type => :search do
   it 'should return stored boolean fields' do
     stub_full_results('instance' => Post.new, 'featured_bs' => true)
     session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
+  end
+
+  it 'should return stored boolean fields that evaluate to false' do
+    stub_full_results('instance' => Post.new, 'featured_bs' => false)
+    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should == false
   end
 
   it 'should return stored dynamic fields' do
