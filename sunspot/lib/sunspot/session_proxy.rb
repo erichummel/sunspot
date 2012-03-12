@@ -83,5 +83,13 @@ module Sunspot
         'silent_fail_session_proxy'
       )
     )
+    autoload(
+      :MulticoreSessionProxy,
+      File.join(
+        File.dirname(__FILE__),
+        'session_proxy',
+        'multicore_session_proxy'
+      )
+    )
   end
 end
