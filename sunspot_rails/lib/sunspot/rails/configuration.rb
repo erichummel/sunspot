@@ -352,5 +352,25 @@ module Sunspot #:nodoc:
       end
       
     end
+
+    class ExtendedConfiguration < Sunspot::Rails::Configuration
+      def initialize( configuration_hash )
+        @supplied_configuration = configuration_hash
+      end
+      protected
+      def solr_url
+        unless @cached_solr_url
+          @cached_solr_url = super
+          @cached_solr_url.path = @supplied_configuration["path"] if @cached_solr_url # fold in the path constructed from the multicore session
+        end
+        @cached_solr_url
+      end
+      
+      private
+      def user_configuration
+        @user_configuration ||= @supplied_configuration || super
+      end
+      
+    end
   end
 end
